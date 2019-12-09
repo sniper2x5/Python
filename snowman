@@ -29,6 +29,8 @@ r2=r*1.25
 r3=r2*1.25
 sm_height=(r*2)+(r2*2)+(r3*2)
 sm_bottom=(sm_height-(r2+r3))+y
+jump= False
+jumpcount=10
 
 
 #screen init
@@ -101,8 +103,6 @@ while True:
                 else:
                     x_dir=0 
         #Jump
-        jump= False
-        jumpcount=10
         
         if not jump:
             if event.type==KEYDOWN:
