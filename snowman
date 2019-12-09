@@ -6,8 +6,8 @@ import random
 
 #COLORS
 colorRed=pygame.Color(241,59,62)
-colorBlue=pygame.Color(200,254,249)
-#colorBlue=pygame.Color(107,0,173)
+#colorBlue=pygame.Color(200,254,249)
+colorBlue=pygame.Color(107,0,173)
 colorGreen=pygame.Color(100,182,100)
 colorWhite=pygame.Color(255,250,250)
 colorBlack=pygame.Color(0,0,0)
@@ -102,28 +102,7 @@ while True:
                     pass
                 else:
                     x_dir=0 
-        #Jump
-        
-        if not jump:
-            if event.type==KEYDOWN:
-                if event.key==K_SPACE:
-                    jump=True
-        else:
-            if jumpcount>=-10:
-                neg=1
-                if jumpcount<0:
-                    neg=-1
-                y-=(jumpcount**2)*0.5*neg
-                jumpcount-=1
-            else:
-                jump= False
-                jumpcount=10
-                    #if sm_bottom>=ground:
-                        #y-=r3
-
                         
-
-                
         #Size Change
         if event.type==KEYDOWN:
             if event.key==K_e:
@@ -133,6 +112,27 @@ while True:
         if event.type==KEYUP:
             if event.key==K_e or event.key==K_q:
                 r_change=0
+    #Jump
+        
+        if not jump:
+            if event.type==KEYDOWN:
+                if event.key==K_SPACE:
+                    jump=True
+
+                    #if sm_bottom>=ground:
+                        #y-=r3
+    else:
+        if jump==True:
+            if jumpcount>=-10:
+                neg=1
+                if jumpcount<0:
+                    neg=-1
+                y-=(jumpcount**2)*0.3*neg
+                jumpcount-=1
+            else:
+                jump= False
+                jumpcount=10
+
 
 
     
