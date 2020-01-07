@@ -37,6 +37,7 @@ x1_dir=0
 y1_dir=0
 x1_right=False
 x1_left=False
+x1_accel=0
 def char1 (x1,y1):
     """char1 (x1,y1) - creates char1 at given coordinates"""
     pygame.draw.circle(screen, colorRed, (x1,y1),xR)
@@ -63,6 +64,7 @@ while True:
         if event.type==KEYDOWN:
             if event.key==K_d:
                 x1_dir+=1
+                x1_accel=1
                 x1_right=True
             if event.key==K_a:
                 x1_dir-=1
@@ -80,14 +82,9 @@ while True:
         
         print(x1_dir)
 
-            
-
-
-
                 
     stage (centerX,centerY)
     char1 (x1,y1)
+    x1_dir=x1_dir+x1_accel
     x1+=x1_dir
     y1+=y1_dir
-    pygame.display.update()
-    fpsClock.tick(60)
