@@ -35,17 +35,24 @@ x1=int(centerX-(stageR*0.8))
 y1=centerY
 x1_dir=0
 y1_dir=0
-x1_right=False
 def char1 (x1,y1):
     """char1 (x1,y1) - creates char1 at given coordinates"""
     pygame.draw.circle(screen, colorRed, (x1,y1),xR)
 print (x1)
 print (centerX)
-if x1_right==True:
-    x1_dir+2
-    
 
-    
+#Character 2
+x2=int(centerX+(stageR*0.8))
+y2=centerY
+x2_dir=0
+y2_dir=0
+def char2 (x2,y2):
+    """char2 (x2,y2) - creates char1 at given coordinates"""
+    pygame.draw.circle(screen, colorGreen, (x2,y2),xR)
+
+
+
+
 
 while True:
     screen.fill(colorBlack)
@@ -54,28 +61,38 @@ while True:
         if event.type== QUIT:
             pygame.quit()
             sys.exit()
-        if event.type==KEYDOWN:
-            if event.key==K_d:
-                x1_dir+=1
-                x1_right=True
-            if event.key==K_a:
-                x1_dir-=1
-            if event.key==K_w:
-                y1_dir-=1
-            if event.key==K_s:
-                y1_dir+=1
-        if event.type==KEYUP:
-            if event.key==K_d:
-                x1_right=False
 
-            
+    keys = pygame.key.get_pressed()
 
+    if keys[K_d] or keys[K_a]:
+        x1_dir += 0.1 if keys[K_d] else -0.1
+    else:
+        x1_dir *= 0.98
 
+    if keys[K_w] or keys[K_s]:
+        y1_dir += 0.1 if keys[K_s] else -0.1
+    else:
+        y1_dir *= 0.98
+        
+#-------------------- CHAR2 MOVEMENT --------------------
 
-                
+    if keys[K_RIGHT] or keys[K_LEFT]:
+        x2_dir += 0.1 if keys[K_RIGHT] else -0.1
+    else:
+        x2_dir *= 0.98
+
+    if keys[K_UP] or keys[K_DOWN]:
+        y2_dir += 0.1 if keys[K_DOWN] else -0.1
+    else:
+        y2_dir *= 0.98
+        
+        
     stage (centerX,centerY)
-    char1 (x1,y1)
+    char1 (round(x1),round(y1))
+    char2 (round(x2),round(y2))
     x1+=x1_dir
     y1+=y1_dir
+    x2+=x2_dir
+    y2+=y2_dir
     pygame.display.update()
     fpsClock.tick(60)
