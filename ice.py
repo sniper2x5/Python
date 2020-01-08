@@ -1,6 +1,7 @@
 import pygame, sys, time
 from pygame.locals import *
 import random
+import math
 
 
 #Colors
@@ -61,6 +62,10 @@ while True:
         if event.type== QUIT:
             pygame.quit()
             sys.exit()
+    
+    distance=math.hypot(x1-x2,y1-y2)
+    if distance <= 2*xR:
+        print ("HIT")
 
     keys = pygame.key.get_pressed()
 
@@ -74,7 +79,7 @@ while True:
     else:
         y1_dir *= 0.98
         
-#-------------------- CHAR2 MOVEMENT --------------------
+# -------------------- CHAR2 MOVEMENT --------------------
 
     if keys[K_RIGHT] or keys[K_LEFT]:
         x2_dir += 0.1 if keys[K_RIGHT] else -0.1
@@ -86,7 +91,7 @@ while True:
     else:
         y2_dir *= 0.98
         
-        
+
     stage (centerX,centerY)
     char1 (round(x1),round(y1))
     char2 (round(x2),round(y2))
