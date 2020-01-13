@@ -52,9 +52,6 @@ def char2 (x2,y2):
     pygame.draw.circle(screen, colorGreen, (x2,y2),xR)
 
 
-
-
-
 while True:
     screen.fill(colorBlack)
     for event in pygame.event.get():
@@ -63,9 +60,6 @@ while True:
             pygame.quit()
             sys.exit()
     
-    distance=math.hypot(x1-x2,y1-y2)
-    if distance <= 2*xR:
-        print ("HIT")
 
     keys = pygame.key.get_pressed()
 
@@ -90,7 +84,51 @@ while True:
         y2_dir += 0.1 if keys[K_DOWN] else -0.1
     else:
         y2_dir *= 0.98
-        
+
+    v12 = pygame.math.Vector2(x1-x2, y1-y2)
+    distance = v12.length()
+    hit_dist = 2*xR
+    if distance <= hit_dist:
+        # vector beteween center points
+        nv = v12.normalize()
+        # movement direction and combined relative movement
+        d1 = pygame.math.Vector2(x1_dir, y1_dir)
+        d2 = pygame.math.Vector2(x2_dir, y2_dir)
+        dd = d1 - d2
+        if dd.length() == 0:
+            # normalized movement and normal distances
+            ddn = dd.normalize()
+            dir_dist  = ddn.dot(v12)
+            norm_dist = pygame.math.Vector2(-ddn[0], ddn[1]).dot(v12)
+            # minimum distance along the line of relative movement
+            min_dist = math.sqrt(hit_dist*hit_dist - norm_dist*norm_dist)
+            if dir_dist < min_dist:
+                # update postions of the players so that the distance is 2*xR
+                d1l, d2l = d1.length(), d2.length()
+                d1n = d1/d1l if d1l > 0 else d1
+                d2n = d2/d2l if d2l > 0 else d2
+                x1 -= d1n.x * d1l / (d1l+d2l)
+                y1 -= d1n.y * d1l / (d1l+d2l)
+                x2 -= d2n.x * d2l / (d1l+d2l)
+                y2 -= d2n.y * d2l / (d1l+d2l)
+                # recalculate vector beteween center points
+                v12 = pygame.math.Vector2(x1-x2, y1-y2)
+                nv = v12.normalize()
+    
+            # reflect movement vectors
+            rd1 = d1.reflect(nv)
+            rd2 = d2.reflect(nv)
+            len1, len2 = rd1.length(), rd2.length()
+            if len1 > 0:
+                rd1 = rd1 * len2 / len1
+                x1_dir, y1_dir = rd1.x, rd1.y
+            else:
+                x1_dir, y1_dir = -x2_dir, -y2_dir
+            if len2 > 0:
+                rd2 = rd2 * len1 / len2
+                x2_dir, y2_dir = rd2.x, rd2.y
+            else:
+                x2_dir, y2_dir = -x1_dir, -y1_dir
 
     stage (centerX,centerY)
     char1 (round(x1),round(y1))
