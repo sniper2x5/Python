@@ -4,6 +4,7 @@ import random
 import math
 
 
+
 #Colors
 colorRed=pygame.Color(241,59,62)
 colorPurple=pygame.Color(200,254,249)
@@ -39,8 +40,6 @@ y1_dir=0
 def char1 (x1,y1):
     """char1 (x1,y1) - creates char1 at given coordinates"""
     pygame.draw.circle(screen, colorRed, (x1,y1),xR)
-print (x1)
-print (centerX)
 
 #Character 2
 x2=int(centerX+(stageR*0.8))
@@ -52,6 +51,7 @@ def char2 (x2,y2):
     pygame.draw.circle(screen, colorGreen, (x2,y2),xR)
 
 
+
 while True:
     screen.fill(colorBlack)
     for event in pygame.event.get():
@@ -60,6 +60,8 @@ while True:
             pygame.quit()
             sys.exit()
             
+# ~~~~~~~~~~ COLLISION DETECTION ~~~~~~~~~~~
+
     v12 = pygame.math.Vector2(x1-x2, y1-y2)
     distance = v12.length()
     hit_dist = 2*xR
@@ -105,6 +107,20 @@ while True:
             else:
                 x2_dir, y2_dir = -x1_dir, -y1_dir
     
+# ~~~~~~~~~~~ Borders ~~~~~~~~~~~~~~
+    x1_cdist=((centerX-x1)**2+(centerY-y1)**2)**0.5
+    x1_dead=False
+    if x1_cdist>(stageR+30):
+        x1_dead=True
+        game_over=True
+    x2_cdist=((centerX-x2)**2+(centerY-y2)**2)**0.5
+    x2_dead=False
+    if x2_cdist>(stageR+30):
+        x2_dead=True
+        game_over=True
+        
+    game_over=False
+    
 
     keys = pygame.key.get_pressed()
 
@@ -131,10 +147,12 @@ while True:
         y2_dir *= 0.98
 
     
-
-    stage (centerX,centerY)
-    char1 (round(x1),round(y1))
-    char2 (round(x2),round(y2))
+    if game_over==False:
+        stage (centerX,centerY)
+    if x1_dead==False:
+        char1 (round(x1),round(y1))
+    if x2_dead==False:
+        char2 (round(x2),round(y2))    
     x1+=x1_dir
     y1+=y1_dir
     x2+=x2_dir
