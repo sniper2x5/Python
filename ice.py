@@ -123,28 +123,29 @@ while True:
     
 
     keys = pygame.key.get_pressed()
-
-    if keys[K_d] or keys[K_a]:
-        x1_dir += 0.1 if keys[K_d] else -0.1
-    else:
-        x1_dir *= 0.98
-
-    if keys[K_w] or keys[K_s]:
-        y1_dir += 0.1 if keys[K_s] else -0.1
-    else:
-        y1_dir *= 0.98
+# -------------------- CHAR1 MOVEMENT  WASD  --------------------
+    if x1_dead==False:
+        if keys[K_d] or keys[K_a]:
+            x1_dir += 0.1 if keys[K_d] else -0.1
+        else:
+            x1_dir *= 0.98
+    
+        if keys[K_w] or keys[K_s]:
+            y1_dir += 0.1 if keys[K_s] else -0.1
+        else:
+            y1_dir *= 0.98
         
-# -------------------- CHAR2 MOVEMENT --------------------
-
-    if keys[K_RIGHT] or keys[K_LEFT]:
-        x2_dir += 0.1 if keys[K_RIGHT] else -0.1
-    else:
-        x2_dir *= 0.98
-
-    if keys[K_UP] or keys[K_DOWN]:
-        y2_dir += 0.1 if keys[K_DOWN] else -0.1
-    else:
-        y2_dir *= 0.98
+# -------------------- CHAR2 MOVEMENT  up/down/left/right --------------------
+    if x2_dead==False:
+        if keys[K_RIGHT] or keys[K_LEFT]:
+            x2_dir += 0.1 if keys[K_RIGHT] else -0.1
+        else:
+            x2_dir *= 0.98
+    
+        if keys[K_UP] or keys[K_DOWN]:
+            y2_dir += 0.1 if keys[K_DOWN] else -0.1
+        else:
+            y2_dir *= 0.98
 
     
     if game_over==False:
