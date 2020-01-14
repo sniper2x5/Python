@@ -59,32 +59,7 @@ while True:
         if event.type== QUIT:
             pygame.quit()
             sys.exit()
-    
-
-    keys = pygame.key.get_pressed()
-
-    if keys[K_d] or keys[K_a]:
-        x1_dir += 0.1 if keys[K_d] else -0.1
-    else:
-        x1_dir *= 0.98
-
-    if keys[K_w] or keys[K_s]:
-        y1_dir += 0.1 if keys[K_s] else -0.1
-    else:
-        y1_dir *= 0.98
-        
-# -------------------- CHAR2 MOVEMENT --------------------
-
-    if keys[K_RIGHT] or keys[K_LEFT]:
-        x2_dir += 0.1 if keys[K_RIGHT] else -0.1
-    else:
-        x2_dir *= 0.98
-
-    if keys[K_UP] or keys[K_DOWN]:
-        y2_dir += 0.1 if keys[K_DOWN] else -0.1
-    else:
-        y2_dir *= 0.98
-
+            
     v12 = pygame.math.Vector2(x1-x2, y1-y2)
     distance = v12.length()
     hit_dist = 2*xR
@@ -95,7 +70,7 @@ while True:
         d1 = pygame.math.Vector2(x1_dir, y1_dir)
         d2 = pygame.math.Vector2(x2_dir, y2_dir)
         dd = d1 - d2
-        if dd.length() == 0:
+        if dd.length() > 0:
             # normalized movement and normal distances
             ddn = dd.normalize()
             dir_dist  = ddn.dot(v12)
@@ -129,6 +104,33 @@ while True:
                 x2_dir, y2_dir = rd2.x, rd2.y
             else:
                 x2_dir, y2_dir = -x1_dir, -y1_dir
+    
+
+    keys = pygame.key.get_pressed()
+
+    if keys[K_d] or keys[K_a]:
+        x1_dir += 0.1 if keys[K_d] else -0.1
+    else:
+        x1_dir *= 0.98
+
+    if keys[K_w] or keys[K_s]:
+        y1_dir += 0.1 if keys[K_s] else -0.1
+    else:
+        y1_dir *= 0.98
+        
+# -------------------- CHAR2 MOVEMENT --------------------
+
+    if keys[K_RIGHT] or keys[K_LEFT]:
+        x2_dir += 0.1 if keys[K_RIGHT] else -0.1
+    else:
+        x2_dir *= 0.98
+
+    if keys[K_UP] or keys[K_DOWN]:
+        y2_dir += 0.1 if keys[K_DOWN] else -0.1
+    else:
+        y2_dir *= 0.98
+
+    
 
     stage (centerX,centerY)
     char1 (round(x1),round(y1))
