@@ -23,6 +23,19 @@ pygame.display.set_caption ('SUMO')
 centerX=w//2
 centerY=h//2
 
+'''bigFont = pygame.font.Font('freesansbold.ttf',32)
+smallFont=pygame.font.Font("freesanbold.ttf",16)
+titleText=bigFont.render("Ice Fighters", True, colorWhite, colorBlack)
+def title():
+    while True:
+        screen.fill(colorBlack)
+        for event in pygame.event.get():
+            #Game Exit
+            if event.type== QUIT:
+                pygame.quit()
+                sys.exit()
+        screen.blit(titleText, (350,50))'''
+    
 
 def game():
     
@@ -140,6 +153,7 @@ def game():
             x1_dead=True
             time.sleep(3)
             x1_win+=1
+            print (x1_win)
             game_over=True
         x2_cdist=((centerX-x2)**2+(centerY-y2)**2)**0.5
         x2_dead=False
@@ -147,6 +161,7 @@ def game():
             x2_dead=True
             time.sleep(3)
             x2_win+=1
+            print (x1_win)
             game_over=True
             
 
@@ -192,5 +207,6 @@ def game():
         fpsClock.tick(60)
         
 while True:
+    #title()
     game()
     
