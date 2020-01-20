@@ -3,27 +3,28 @@ from pygame.locals import *
 import random
 import math
 
+#Colors
+colorRed=pygame.Color(241,59,62)
+colorPurple=pygame.Color(200,254,249)
+colorBlue=pygame.Color(52, 207, 235)
+colorGreen=pygame.Color(100,182,100)
+colorWhite=pygame.Color(255,250,250)
+colorBlack=pygame.Color(0,0,0)
+colorOrange=pygame.Color(242,164,0)
+colorBrown=pygame.Color(148,103,58)
+
+#Dimensions
+w=800
+h=600
+pygame.init()
+fpsClock=pygame.time.Clock()
+screen=pygame.display.set_mode((w,h))
+pygame.display.set_caption ('SUMO')
+centerX=w//2
+centerY=h//2
+
 
 def game():
-    #Colors
-    colorRed=pygame.Color(241,59,62)
-    colorPurple=pygame.Color(200,254,249)
-    colorBlue=pygame.Color(52, 207, 235)
-    colorGreen=pygame.Color(100,182,100)
-    colorWhite=pygame.Color(255,250,250)
-    colorBlack=pygame.Color(0,0,0)
-    colorOrange=pygame.Color(242,164,0)
-    colorBrown=pygame.Color(148,103,58)
-    
-    #Dimensions
-    w=800
-    h=600
-    pygame.init()
-    fpsClock=pygame.time.Clock()
-    screen=pygame.display.set_mode((w,h))
-    pygame.display.set_caption ('SUMO')
-    centerX=w//2
-    centerY=h//2
     
     #Stage
     stageR=250
@@ -37,6 +38,7 @@ def game():
     y1=centerY
     x1_dir=0
     y1_dir=0
+    x1_win=0
     def char1 (x1,y1):
         """char1 (x1,y1) - creates char1 at given coordinates"""
         pygame.draw.circle(screen, colorRed, (x1,y1),xR)
@@ -46,13 +48,37 @@ def game():
     y2=centerY
     x2_dir=0
     y2_dir=0
+    x2_win=0
     def char2 (x2,y2):
         """char2 (x2,y2) - creates char1 at given coordinates"""
         pygame.draw.circle(screen, colorGreen, (x2,y2),xR)
     
+    game_over=False
     
+    def score ():
+        pygame.draw.circle(screen, colorOrange, (50,30), (int(xR-5)))
+        pygame.draw.circle(screen, colorBlack, (50,30), (int(xR-10)))
+        pygame.draw.circle(screen, colorOrange, (100,30), (int(xR-5)))
+        pygame.draw.circle(screen, colorBlack, (100,30), (int(xR-10)))
+        pygame.draw.circle(screen, colorOrange, (150,30), (int(xR-5)))
+        pygame.draw.circle(screen, colorBlack, (150,30), (int(xR-10)))
+        
+        pygame.draw.circle(screen, colorOrange, (750,30), (int(xR-5)))
+        pygame.draw.circle(screen, colorBlack, (750,30), (int(xR-10)))
+        pygame.draw.circle(screen, colorOrange, (700,30), (int(xR-5)))
+        pygame.draw.circle(screen, colorBlack, (700,30), (int(xR-10)))
+        pygame.draw.circle(screen, colorOrange, (650,30), (int(xR-5)))
+        pygame.draw.circle(screen, colorBlack, (650,30), (int(xR-10)))
     
-    while True:
+    def x1score ():
+        if x1_win>0:
+            pygame.draw.circle(screen, colorOrange, (50,30), (int(xR-5)))
+        elif x1_win>1:
+            pygame.draw.circle(screen, colorOrange, (100,30), (int(xR-5)))
+        elif x1_win>2:
+            pygame.draw.circle(screen, colorOrange, (150,30), (int(xR-5)))
+            
+    while game_over==False:
         screen.fill(colorBlack)
         for event in pygame.event.get():
             #Game Exit
@@ -112,14 +138,18 @@ def game():
         x1_dead=False
         if x1_cdist>(stageR+30):
             x1_dead=True
+            time.sleep(3)
+            x1_win+=1
             game_over=True
         x2_cdist=((centerX-x2)**2+(centerY-y2)**2)**0.5
         x2_dead=False
         if x2_cdist>(stageR+30):
             x2_dead=True
+            time.sleep(3)
+            x2_win+=1
             game_over=True
             
-        game_over=False
+
         
     
         keys = pygame.key.get_pressed()
@@ -147,18 +177,20 @@ def game():
             else:
                 y2_dir *= 0.98
     
-        
-        if game_over==False:
-            stage (centerX,centerY)
+        score()
+        stage (centerX,centerY)
         if x1_dead==False:
             char1 (round(x1),round(y1))
         if x2_dead==False:
-            char2 (round(x2),round(y2))    
+            char2 (round(x2),round(y2))   
+        x1score() 
         x1+=x1_dir
         y1+=y1_dir
         x2+=x2_dir
         y2+=y2_dir
         pygame.display.update()
         fpsClock.tick(60)
+        
 while True:
     game()
+    
