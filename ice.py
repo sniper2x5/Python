@@ -152,15 +152,15 @@ def game():
         if x1_cdist>(stageR+30):
             x1_dead=True
             time.sleep(3)
-            x1_win+=1
-            print (x1_win)
+            x2_win+=1
+            print (x2_win)
             game_over=True
         x2_cdist=((centerX-x2)**2+(centerY-y2)**2)**0.5
         x2_dead=False
         if x2_cdist>(stageR+30):
             x2_dead=True
             time.sleep(3)
-            x2_win+=1
+            x1_win+=1
             print (x1_win)
             game_over=True
             
