@@ -3,6 +3,7 @@ from pygame.locals import *
 import random
 import math
 
+
 #Colors
 colorRed=pygame.Color(241,59,62)
 colorPurple=pygame.Color(200,254,249)
@@ -27,14 +28,61 @@ x1_win=0
 x2_win=0
 point=3
 pointx=240
+gameEnd_p=1
+gameEnd_px=340
+option=False
 
-bigFont = pygame.font.Font('shark party.ttf',64)
-smallFont = pygame.font.Font("shark party.ttf",32)
+# ~~~~~~~~~~~~~~~~~~~~~ TEXT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bigFont = pygame.font.Font('shark_party.ttf',64)
+smallFont = pygame.font.Font("shark_party.ttf",32)
+tinyFont = pygame.font.Font('shark_party.ttf', 16)
 titleText = bigFont.render("Ice Fighters", True, colorBlue)
 multiplayerText=smallFont.render("Multiplayer", True, colorBlue2,)
-singleplayerText=smallFont.render("Singlepalyer", True, colorBlue2)
+singleplayerText=smallFont.render("Singleplayer", True, colorBlue2)
 intructionsText=smallFont.render("How to Play", True, colorBlue2)
 leaderboardText=smallFont.render("Leaderboard", True, colorBlue2)
+game_endText=bigFont.render("GAME OVER", True, colorRed)
+replayText=smallFont.render ("Play Again", True, colorBlue)
+returnText=smallFont.render ("Main Menu", True, colorBlue)
+menu_upText=tinyFont.render ("= Menu Up", True, colorBlack)
+menu_downText=tinyFont.render ('= Menu Down',True, colorBlack)
+menu_returnText=tinyFont.render ('= ENTER', True, colorBlack)
+def game_end():
+    while True:
+        screen.fill(colorBlack)
+        for event in pygame.event.get():
+            #Game Exit
+            if event.type== QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type==KEYDOWN:
+                if event.key==K_s:
+                    global gameEnd_p
+                    global gameEnd_px
+                    if gameEnd_p==1:
+                        gameEnd_px+=75
+                        gameEnd_p-=1
+                    elif gameEnd_p==0:
+                        gameEnd_px-=75
+                        gameEnd_p+=1 
+                if event.key==K_w:
+                    if gameEnd_p==1:
+                        gameEnd_px+=75
+                        gameEnd_p-=1
+                    elif gameEnd_p==0:
+                        gameEnd_px-=75
+                        gameEnd_p+=1
+                if event.key==K_RETURN:
+                    if gameEnd_p==0:
+                        title()
+        screen.blit(game_endText,(230,50))
+        screen.blit(replayText,(300,325))
+        screen.blit(returnText,(300,400))
+        pygame.draw.circle(screen,colorRed,(280,gameEnd_px),10)
+        pygame.display.update()
+        fpsClock.tick(60)
+
+        
 def title():
     while True:
         screen.fill(colorBlack)
@@ -48,17 +96,39 @@ def title():
                     global point
                     global pointx
                     if point==3:
-                        pointx=315
-                        point=2
+                        pointx+=75
+                        point-=1
+                    elif point==2:
+                        pointx+=75
+                        point-=1
+                    elif point==1:
+                        pointx+=75
+                        point-=1
+                    elif point==0:
+                        pointx-=225
+                        point+=3
+                if event.key==K_w:
+                    if point==3:
+                        pointx+=225
+                        point-=3
+                    elif point==2:
+                        pointx-=75
+                        point+=1
+                    elif point==1:
+                        pointx-=75
+                        point+=1
+                    elif point==0:
+                        pointx-=75
+                        point+=1
+                if event.key==K_RETURN:
                     if point==2:
-                        pointx=390
-                        point=1
-                    if point==1:
-                        pointx=465
-                        point=0
-                    if point==0:
-                        pointx=240
-                        point=3
+                        option=True
+                        game()
+                    elif point==1:
+                        option=True
+                        instruct()
+                    
+                    
         #Background
         title_bg=pygame.image.load("icebiome3.png")
         screen.blit(title_bg,(0,0))
@@ -67,10 +137,37 @@ def title():
         screen.blit(multiplayerText, (300,300))
         screen.blit(intructionsText, (300,375))
         screen.blit(leaderboardText, (300,450))
+        screen.blit(menu_upText, (700,450))
+        screen.blit(menu_downText, (700,475))
+        screen.blit(menu_returnText, (700,500))
         pygame.draw.circle(screen,colorRed,(280,pointx),10)
+        pygame.draw.circle(screen,colorWhite,(685,460),10)
+        pygame.draw.circle(screen,colorRed,(685,485),10)
+        pygame.draw.circle(screen,colorBlue2,(685,510),10)
         pygame.display.update()
         fpsClock.tick(60)
 
+def instruct():
+    while True:
+        screen.fill(colorBlack)
+        for event in pygame.event.get():
+            #Game Exit
+            if event.type== QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type==KEYDOWN:
+                if event.key==K_RETURN:
+                    title()
+        instruct_bg=pygame.image.load('instruct.png')
+        instruct_sprite=pygame,image.load('instructsprite.png')
+        
+        screen.blit(instruct_bg,(0,0))
+        screen.blit(returnText, (325,550))
+        pygame.draw.circle(screen,colorRed,(310,568),10)
+        pygame.display.update()
+        fpsClock.tick(60)
+        
+        
 def game():
     
     #Stage
@@ -85,7 +182,8 @@ def game():
     y1=centerY
     x1_dir=0
     y1_dir=0
-    #x1_win=0
+    global x1_win
+    x1_win=0
     def char1 (x1,y1):
         """char1 (x1,y1) - creates char1 at given coordinates"""
         pygame.draw.circle(screen, colorRed, (x1,y1),xR)
@@ -95,7 +193,8 @@ def game():
     y2=centerY
     x2_dir=0
     y2_dir=0
-    #x2_win=0
+    global x2_win
+    x2_win=0
     def char2 (x2,y2):
         """char2 (x2,y2) - creates char1 at given coordinates"""
         pygame.draw.circle(screen, colorGreen, (x2,y2),xR)
@@ -133,7 +232,7 @@ def game():
         if x2_win>2:
             pygame.draw.circle(screen, colorOrange, (650,30), (int(xR-5)))
             
-    while game_over==False:
+    while x1_win!=3 or x2_win!=3:
         screen.fill(colorBlack)
         for event in pygame.event.get():
             #Game Exit
@@ -189,28 +288,28 @@ def game():
                     x2_dir, y2_dir = -x1_dir, -y1_dir
         
     # ~~~~~~~~~~~ Borders ~~~~~~~~~~~~~~
+    
         x1_cdist=((centerX-x1)**2+(centerY-y1)**2)**0.5
         x1_dead=False
         if x1_cdist>(stageR+30):
             x1_dead=True
             time.sleep(3)
-            global x2_win
             x2_win+=1
             print (x2_win)
             game_over=True
+            
         x2_cdist=((centerX-x2)**2+(centerY-y2)**2)**0.5
         x2_dead=False
         if x2_cdist>(stageR+30):
             x2_dead=True
             time.sleep(3)
-            global x1_win
             x1_win+=1
             print (x1_win)
             game_over=True
             
 
         
-    
+    #MOVEMENT
         keys = pygame.key.get_pressed()
     # -------------------- CHAR1 MOVEMENT  WASD  --------------------
         if x1_dead==False:
@@ -252,6 +351,6 @@ def game():
         fpsClock.tick(60)
         
 while True:
+    #game_end()
     title()
     game()
-    
