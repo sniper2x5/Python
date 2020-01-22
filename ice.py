@@ -12,6 +12,7 @@ colorWhite=pygame.Color(255,250,250)
 colorBlack=pygame.Color(0,0,0)
 colorOrange=pygame.Color(242,164,0)
 colorBrown=pygame.Color(148,103,58)
+colorBlue2=pygame.Color(37, 45, 204)
 
 #Dimensions
 w=800
@@ -19,13 +20,21 @@ h=600
 pygame.init()
 fpsClock=pygame.time.Clock()
 screen=pygame.display.set_mode((w,h))
-pygame.display.set_caption ('SUMO')
+pygame.display.set_caption ('Ice Fighters')
 centerX=w//2
 centerY=h//2
+x1_win=0
+x2_win=0
+point=3
+pointx=240
 
-'''bigFont = pygame.font.Font('freesansbold.ttf',32)
-smallFont=pygame.font.Font("freesanbold.ttf",16)
-titleText=bigFont.render("Ice Fighters", True, colorWhite, colorBlack)
+bigFont = pygame.font.Font('shark party.ttf',64)
+smallFont = pygame.font.Font("shark party.ttf",32)
+titleText = bigFont.render("Ice Fighters", True, colorBlue)
+multiplayerText=smallFont.render("Multiplayer", True, colorBlue2,)
+singleplayerText=smallFont.render("Singlepalyer", True, colorBlue2)
+intructionsText=smallFont.render("How to Play", True, colorBlue2)
+leaderboardText=smallFont.render("Leaderboard", True, colorBlue2)
 def title():
     while True:
         screen.fill(colorBlack)
@@ -34,8 +43,33 @@ def title():
             if event.type== QUIT:
                 pygame.quit()
                 sys.exit()
-        screen.blit(titleText, (350,50))'''
-    
+            if event.type==KEYDOWN:
+                if event.key==K_s:
+                    global point
+                    global pointx
+                    if point==3:
+                        pointx=315
+                        point=2
+                    if point==2:
+                        pointx=390
+                        point=1
+                    if point==1:
+                        pointx=465
+                        point=0
+                    if point==0:
+                        pointx=240
+                        point=3
+        #Background
+        title_bg=pygame.image.load("icebiome3.png")
+        screen.blit(title_bg,(0,0))
+        screen.blit(titleText, (200,50))
+        screen.blit(singleplayerText, (300,225))
+        screen.blit(multiplayerText, (300,300))
+        screen.blit(intructionsText, (300,375))
+        screen.blit(leaderboardText, (300,450))
+        pygame.draw.circle(screen,colorRed,(280,pointx),10)
+        pygame.display.update()
+        fpsClock.tick(60)
 
 def game():
     
@@ -51,7 +85,7 @@ def game():
     y1=centerY
     x1_dir=0
     y1_dir=0
-    x1_win=0
+    #x1_win=0
     def char1 (x1,y1):
         """char1 (x1,y1) - creates char1 at given coordinates"""
         pygame.draw.circle(screen, colorRed, (x1,y1),xR)
@@ -61,7 +95,7 @@ def game():
     y2=centerY
     x2_dir=0
     y2_dir=0
-    x2_win=0
+    #x2_win=0
     def char2 (x2,y2):
         """char2 (x2,y2) - creates char1 at given coordinates"""
         pygame.draw.circle(screen, colorGreen, (x2,y2),xR)
@@ -86,10 +120,18 @@ def game():
     def x1score ():
         if x1_win>0:
             pygame.draw.circle(screen, colorOrange, (50,30), (int(xR-5)))
-        elif x1_win>1:
+        if x1_win>1:
             pygame.draw.circle(screen, colorOrange, (100,30), (int(xR-5)))
-        elif x1_win>2:
+        if x1_win>2:
             pygame.draw.circle(screen, colorOrange, (150,30), (int(xR-5)))
+    
+    def x2score ():
+        if x2_win>0:
+            pygame.draw.circle(screen, colorOrange, (750,30), (int(xR-5)))
+        if x2_win>1:
+            pygame.draw.circle(screen, colorOrange, (700,30), (int(xR-5)))
+        if x2_win>2:
+            pygame.draw.circle(screen, colorOrange, (650,30), (int(xR-5)))
             
     while game_over==False:
         screen.fill(colorBlack)
@@ -152,6 +194,7 @@ def game():
         if x1_cdist>(stageR+30):
             x1_dead=True
             time.sleep(3)
+            global x2_win
             x2_win+=1
             print (x2_win)
             game_over=True
@@ -160,6 +203,7 @@ def game():
         if x2_cdist>(stageR+30):
             x2_dead=True
             time.sleep(3)
+            global x1_win
             x1_win+=1
             print (x1_win)
             game_over=True
@@ -198,7 +242,8 @@ def game():
             char1 (round(x1),round(y1))
         if x2_dead==False:
             char2 (round(x2),round(y2))   
-        x1score() 
+        x1score()
+        x2score() 
         x1+=x1_dir
         y1+=y1_dir
         x2+=x2_dir
@@ -207,6 +252,6 @@ def game():
         fpsClock.tick(60)
         
 while True:
-    #title()
+    title()
     game()
     
