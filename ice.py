@@ -24,8 +24,6 @@ screen=pygame.display.set_mode((w,h))
 pygame.display.set_caption ('Ice Fighters')
 centerX=w//2
 centerY=h//2
-x1_win=0
-x2_win=0
 point=3
 pointx=240
 gameEnd_p=1
@@ -47,6 +45,7 @@ returnText=smallFont.render ("Main Menu", True, colorBlue)
 menu_upText=tinyFont.render ("= Menu Up", True, colorBlack)
 menu_downText=tinyFont.render ('= Menu Down',True, colorBlack)
 menu_returnText=tinyFont.render ('= ENTER', True, colorBlack)
+
 def game_end():
     while True:
         screen.fill(colorBlack)
@@ -159,7 +158,7 @@ def instruct():
                 if event.key==K_RETURN:
                     title()
         instruct_bg=pygame.image.load('instruct.png')
-        instruct_sprite=pygame,image.load('instructsprite.png')
+        instruct_sprite=pygame.image.load('instructsprite.png')
         
         screen.blit(instruct_bg,(0,0))
         screen.blit(returnText, (325,550))
@@ -182,7 +181,6 @@ def game():
     y1=centerY
     x1_dir=0
     y1_dir=0
-    global x1_win
     x1_win=0
     def char1 (x1,y1):
         """char1 (x1,y1) - creates char1 at given coordinates"""
@@ -193,13 +191,11 @@ def game():
     y2=centerY
     x2_dir=0
     y2_dir=0
-    global x2_win
     x2_win=0
     def char2 (x2,y2):
         """char2 (x2,y2) - creates char1 at given coordinates"""
         pygame.draw.circle(screen, colorGreen, (x2,y2),xR)
     
-    game_over=False
     
     def score ():
         pygame.draw.circle(screen, colorOrange, (50,30), (int(xR-5)))
@@ -290,57 +286,61 @@ def game():
     # ~~~~~~~~~~~ Borders ~~~~~~~~~~~~~~
     
         x1_cdist=((centerX-x1)**2+(centerY-y1)**2)**0.5
-        x1_dead=False
         if x1_cdist>(stageR+30):
-            x1_dead=True
             time.sleep(3)
+            x2=int(centerX+(stageR*0.8))
+            y2=centerY
+            x1=int(centerX-(stageR*0.8))
+            y1=centerY
             x2_win+=1
+            x1_dir=0
+            y1_dir=0
             print (x2_win)
-            game_over=True
+
             
         x2_cdist=((centerX-x2)**2+(centerY-y2)**2)**0.5
-        x2_dead=False
         if x2_cdist>(stageR+30):
-            x2_dead=True
             time.sleep(3)
+            x2=int(centerX+(stageR*0.8))
+            y2=centerY
+            x1=int(centerX-(stageR*0.8))
+            y1=centerY
             x1_win+=1
+            x2_dir=0
+            y2_dir=0
             print (x1_win)
-            game_over=True
+
             
 
         
     #MOVEMENT
         keys = pygame.key.get_pressed()
     # -------------------- CHAR1 MOVEMENT  WASD  --------------------
-        if x1_dead==False:
-            if keys[K_d] or keys[K_a]:
-                x1_dir += 0.1 if keys[K_d] else -0.1
-            else:
-                x1_dir *= 0.98
-        
-            if keys[K_w] or keys[K_s]:
-                y1_dir += 0.1 if keys[K_s] else -0.1
-            else:
-                y1_dir *= 0.98
+        if keys[K_d] or keys[K_a]:
+            x1_dir += 0.1 if keys[K_d] else -0.1
+        else:
+            x1_dir *= 0.98
+    
+        if keys[K_w] or keys[K_s]:
+            y1_dir += 0.1 if keys[K_s] else -0.1
+        else:
+            y1_dir *= 0.98
             
     # -------------------- CHAR2 MOVEMENT  up/down/left/right --------------------
-        if x2_dead==False:
-            if keys[K_RIGHT] or keys[K_LEFT]:
-                x2_dir += 0.1 if keys[K_RIGHT] else -0.1
-            else:
-                x2_dir *= 0.98
-        
-            if keys[K_UP] or keys[K_DOWN]:
-                y2_dir += 0.1 if keys[K_DOWN] else -0.1
-            else:
-                y2_dir *= 0.98
+        if keys[K_RIGHT] or keys[K_LEFT]:
+            x2_dir += 0.1 if keys[K_RIGHT] else -0.1
+        else:
+            x2_dir *= 0.98
+    
+        if keys[K_UP] or keys[K_DOWN]:
+            y2_dir += 0.1 if keys[K_DOWN] else -0.1
+        else:
+            y2_dir *= 0.98
     
         score()
         stage (centerX,centerY)
-        if x1_dead==False:
-            char1 (round(x1),round(y1))
-        if x2_dead==False:
-            char2 (round(x2),round(y2))   
+        char1 (round(x1),round(y1))
+        char2 (round(x2),round(y2))   
         x1score()
         x2score() 
         x1+=x1_dir
@@ -353,4 +353,3 @@ def game():
 while True:
     #game_end()
     title()
-    game()
